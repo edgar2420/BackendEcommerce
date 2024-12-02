@@ -16,6 +16,8 @@ module.exports = app => {
     // Ruta para actualizar un pago
     router.put('/pagos/:id', pagoController.updatePago);
 
+    router.post("/pagos/directo", pagoController.pagoDirecto);
+
     // Ruta para eliminar un pago
     router.delete('/pagos/:id', pagoController.deletePago);
 

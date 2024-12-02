@@ -68,6 +68,40 @@ exports.createPago = async (req, res) => {
   }
 };
 
+exports.pagoDirecto = async (req, res) => {
+  try {
+    const { totalAmount, pedidoId } = req.body;
+
+    if (!totalAmount || totalAmount <= 0) {
+      return res.status(400).json({ message: "El monto debe ser mayor a 0." });
+    }
+
+    if (!pedidoId) {
+      return res.status(400).json({ message: "El ID del pedido es obligatorio." });
+    }
+
+    const pedido = await Pedido.findByPk(pedidoId);
+    if (!pedido) {
+      return res.status(404).json({ message: "El pedido no existe." });
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalAmount, // Monto en centavos
+      currency: "usd", // Cambia esto si usas otra moneda
+      payment_method_types: ["card"], // Especifica que es un pago con tarjeta
+      metadata: { pedidoId },
+    });
+
+    res.status(200).json({
+      clientSecret: paymentIntent.client_secret, // Retorna el clientSecret al frontend
+      pedidoId,
+    });
+  } catch (error) {
+    console.error("Error al crear el PaymentIntent:", error);
+    res.status(500).json({ message: "Error al crear el PaymentIntent", error: error.message });
+  }
+};
+
 
 // Ruta para confirmar el pago después de que el frontend lo haya procesado
 exports.confirmarPago = async (req, res) => {
