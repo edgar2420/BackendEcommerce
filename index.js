@@ -19,7 +19,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Permitir los métodos HTTP necesarios
   allowedHeaders: ['Content-Type', 'Authorization'],  // Permitir los encabezados necesarios
 };
-  
+app.use(cors(corsOptions));
 // Hacer que el directorio "uploads" sea accesible públicamente
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
