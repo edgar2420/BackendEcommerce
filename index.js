@@ -15,10 +15,25 @@ const port = process.env.PORT;
 
 // Configuración de CORS
 const corsOptions = {
-    origin: 'https://6895-177-222-108-82.ngrok-free.app/',  // Permitir solicitudes desde localhost:3001
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Permitir los métodos HTTP necesarios
-    allowedHeaders: ['Content-Type', 'Authorization'],  // Permitir los encabezados necesarios
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            'http://localhost:3001', // Frontend local
+            'https://6895-177-222-108-82.ngrok-free.app', // Dominio temporal de ngrok
+            'https://backendecommerce-dy3z.onrender.com', // Dominio de producción
+        ];
+
+        // Permitir solicitudes si el origen está en la lista o si no tiene origen (por ejemplo, Postman)
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('No permitido por CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+    credentials: true, // Permitir envío de cookies
 };
+
 app.use(cors(corsOptions));
 // Hacer que el directorio "uploads" sea accesible públicamente
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
