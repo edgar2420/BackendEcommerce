@@ -18,7 +18,7 @@ const corsOptions = {
     origin: (origin, callback) => {
       const allowedOrigins = [
         'http://localhost:3001',
-        'https://[tu-dominio-de-frontend]',
+        'https://[https://6895-177-222-108-82.ngrok-free.app/]',
       ];
   
       if (allowedOrigins.includes(origin) || !origin) {
