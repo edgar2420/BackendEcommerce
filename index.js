@@ -15,7 +15,7 @@ const port = process.env.PORT;
 
 // Configuración de CORS
 const corsOptions = {
-    origin: 'http://localhost:3001',  // Permitir solicitudes desde localhost:3001
+    origin: 'https://6895-177-222-108-82.ngrok-free.app',  // Permitir solicitudes desde localhost:3001
     methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Permitir los métodos HTTP necesarios
     allowedHeaders: ['Content-Type', 'Authorization'],  // Permitir los encabezados necesarios
 };
