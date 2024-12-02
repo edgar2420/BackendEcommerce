@@ -27,46 +27,47 @@ exports.getPagoById = async (req, res) => {
 };
 
 exports.createPago = async (req, res) => {
-    try {
-      const { totalAmount, pedidoId } = req.body;
-  
-      // Verifica los datos que llegan del frontend
-      console.log('Datos recibidos en el backend:', req.body);  // Agregar un log para ver qué se recibe
-  
-      // Verifica que los parámetros sean válidos
-      if (!totalAmount || !pedidoId) {
-        return res.status(400).json({ message: "Faltan parámetros requeridos: totalAmount o pedidoId" });
-      }
-  
-      // Verifica que el monto sea mayor que 0
-      if (totalAmount <= 0) {
-        return res.status(400).json({ message: "El monto total debe ser mayor que 0" });
-      }
-  
-      // Crear el PaymentIntent en Stripe
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: totalAmount,
-        currency: "usd",  // O la moneda que estés utilizando
-      });
-  
-      // Crear el pago y asociarlo con el pedido
-      const nuevoPago = await Pago.create({
-        metodoPago: 'Stripe',
-        estado: 'pendiente',  // Estado inicial del pago
-        transaccionId: paymentIntent.id,
-        pedidoId: pedidoId,  // Asociar con el ID del pedido
-      });
-  
-      // Responder con el client_secret de Stripe
-      res.status(200).json({
-        clientSecret: paymentIntent.client_secret,  // El client_secret para el frontend
-        pagoId: nuevoPago.id,  // ID del pago creado
-      });
-    } catch (error) {
-      console.error("Error al crear el pago:", error);
-      res.status(500).json({ message: "Error al crear el pago", error });
+  try {
+    const { totalAmount, pedidoId } = req.body;
+
+    // Verifica los datos que llegan del frontend
+    console.log('Datos recibidos en el backend:', req.body);  // Agregar un log para ver qué se recibe
+
+    // Verifica que los parámetros sean válidos
+    if (!totalAmount || !pedidoId) {
+      return res.status(400).json({ message: "Faltan parámetros requeridos: totalAmount o pedidoId" });
     }
-  };
+
+    // Verifica que el monto sea mayor que 0
+    if (totalAmount <= 0) {
+      return res.status(400).json({ message: "El monto total debe ser mayor que 0" });
+    }
+
+    // Crear el PaymentIntent en Stripe
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalAmount,
+      currency: "usd",  // O la moneda que estés utilizando
+    });
+
+    // Crear el pago y asociarlo con el pedido
+    const nuevoPago = await Pago.create({
+      metodoPago: 'Stripe',
+      estado: 'pendiente',  // Estado inicial del pago
+      transaccionId: paymentIntent.id,
+      pedidoId: pedidoId,  // Asociar con el ID del pedido
+    });
+
+    // Responder con el client_secret de Stripe
+    res.status(200).json({
+      clientSecret: paymentIntent.client_secret,  // El client_secret para el frontend
+      pagoId: nuevoPago.id,  // ID del pago creado
+    });
+  } catch (error) {
+    console.error("Error al crear el pago:", error);
+    res.status(500).json({ message: "Error al crear el pago", error });
+  }
+};
+
 
 // Ruta para confirmar el pago después de que el frontend lo haya procesado
 exports.confirmarPago = async (req, res) => {

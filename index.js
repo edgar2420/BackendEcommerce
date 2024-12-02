@@ -15,11 +15,27 @@ const port = process.env.PORT;
 
 // Configuración de CORS
 const corsOptions = {
-    origin: 'https://6895-177-222-108-82.ngrok-free.app',  // Permitir solicitudes desde localhost:3001
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Permitir los métodos HTTP necesarios
-    allowedHeaders: ['Content-Type', 'Authorization'],  // Permitir los encabezados necesarios
-};
-app.use(cors(corsOptions));
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'http://localhost:3001',
+        'https://[tu-dominio-de-frontend]',
+      ];
+  
+      if (allowedOrigins.includes(origin) || !origin) {
+        
+        callback(null, true);
+      } else {
+        
+        callback(new Error('No permitido por CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  };
+  
+  app.use(cors(corsOptions));
+  
 // Hacer que el directorio "uploads" sea accesible públicamente
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
