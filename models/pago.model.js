@@ -11,18 +11,18 @@ module.exports = (sequelize, Sequelize) => {
         transaccionId: {
             type: Sequelize.STRING,
         },
-        // Relación con el Pedido
+        
         pedidoId: {
             type: Sequelize.INTEGER,
             references: {
-                model: 'Pedidos', // Asegúrate de que el nombre de la tabla 'Pedidos' esté bien
+                model: 'Pedidos', 
                 key: 'id'
             },
             allowNull: false, // Es obligatorio tener un pedido asociado a un pago
         }
     });
 
-    // Definir la relación con el modelo Pedido
+    
     Pago.associate = models => {
         Pago.belongsTo(models.Pedido, {
             foreignKey: 'pedidoId',
