@@ -31,7 +31,7 @@ exports.createPago = async (req, res) => {
     const { totalAmount, pedidoId } = req.body;
 
     // Verifica los datos que llegan del frontend
-    console.log('Datos recibidos en el backend:', req.body);  // Agregar un log para ver qué se recibe
+    console.log('Datos recibidos en el backend:', req.body); 
 
     // Verifica que los parámetros sean válidos
     if (!totalAmount || !pedidoId) {
@@ -46,7 +46,7 @@ exports.createPago = async (req, res) => {
     // Crear el PaymentIntent en Stripe
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalAmount,
-      currency: "usd",  // O la moneda que estés utilizando
+      currency: "usd",
     });
 
     // Crear el pago y asociarlo con el pedido
@@ -59,7 +59,7 @@ exports.createPago = async (req, res) => {
 
     // Responder con el client_secret de Stripe
     res.status(200).json({
-      clientSecret: paymentIntent.client_secret,  // El client_secret para el frontend
+      clientSecret: paymentIntent.client_secret,
       pagoId: nuevoPago.id,  // ID del pago creado
     });
   } catch (error) {
@@ -87,7 +87,7 @@ exports.pagoDirecto = async (req, res) => {
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalAmount, // Monto en centavos
-      currency: "usd", // Cambia esto si usas otra moneda
+      currency: "usd",
       payment_method_types: ["card"], // Especifica que es un pago con tarjeta
       metadata: { pedidoId },
     });
