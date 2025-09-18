@@ -12,7 +12,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
-                model: 'pedidos',  // Asegúrate de que la tabla se llama 'pedidos'
+                model: 'pedidos',
                 key: 'id'
             }
         },
@@ -20,7 +20,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
-                model: 'productos',  // Asegúrate de que la tabla se llama 'productos'
+                model: 'productos',
                 key: 'id'
             }
         }
