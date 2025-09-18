@@ -20,7 +20,6 @@ exports.listProductos = async (req, res) => {
 };
 
 //Producto por usuario
-// Controller del Producto: Agrega esta función
 exports.getProductosPorUsuario = async (req, res) => {
     try {
         const { usuarioId } = req.params; // userId debe venir de los parámetros
@@ -82,7 +81,7 @@ exports.createProducto = async (req, res) => {
             stock: stock || 0,
             imagenUrl: JSON.stringify(imagenes),
             categoriaId,
-            usuarioId, // Asociar el producto al usuario
+            usuarioId,
         });
 
         res.status(201).json(nuevoProducto);
