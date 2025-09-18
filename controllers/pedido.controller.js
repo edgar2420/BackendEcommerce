@@ -19,12 +19,12 @@ exports.listPedidos = async (req, res) => {
             include: [
                 {
                     model: Producto,
-                    as: 'productos',  // Nombre de la asociación de productos con el pedido
-                    through: { attributes: ['cantidad', 'precio'] }  // Asegúrate de que la relación intermedia (como carritoProducto) tenga estos atributos
+                    as: 'productos',
+                    through: { attributes: ['cantidad', 'precio'] }
                 },
                 {
                     model: Pago,
-                    as: 'pagos'  // Asociación con los pagos relacionados al pedido
+                    as: 'pagos'
                 }
             ],
         });
